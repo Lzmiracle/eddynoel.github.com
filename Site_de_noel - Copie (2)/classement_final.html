@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classement de Noël 🎄</title>
+    <style>
+        /* Styles généraux */
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(to bottom, #cce7ff, #ffefc1);
+            color: #2c3e50;
+        }
+
+        h1 {
+            color: #d63447;
+            text-align: center;
+            font-family: 'Georgia', serif;
+            text-shadow: 2px 2px 5px #fff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #d63447;
+            color: #fff;
+        }
+
+        td {
+            border: 1px solid #ddd;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fffae6;
+        }
+
+        .jeton777 {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: float777 2.5s ease-in-out infinite; /* Ajout de l'animation */
+        }
+
+        .vert777 { background-color: #28a745; }
+        .jaune777 { background-color: #ffc107; }
+        .bleu777 { background-color: #007bff; }
+
+        /* Animation pour les jetons */
+        @keyframes float777 {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .form-container777 {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group777 {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #d63447;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #ad2e3a;
+        }
+
+        #authForm777 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #resetBtn777 {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .admin-actions777 {
+            display: none;
+        }
+
+        /* Responsiveness */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+
+            .form-container777 {
+                padding: 15px;
+            }
+
+            input, select, button {
+                font-size: 14px;
+                padding: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            th, td {
+                padding: 5px;
+                font-size: 0.8rem;
+            }
+
+            .form-container777 {
+                padding: 10px;
+            }
+
+            input, select, button {
+                font-size: 12px;
+                padding: 6px;
+            }
+
+            button {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>🎄 Classement de Noël 🎄</h1>
+
+    <div id="authForm777">
+        <input type="password" id="adminPassword777" placeholder="Mot de passe administrateur">
+        <button onclick="authenticate777()">Se connecter</button>
+    </div>
+
+    <table id="friendsTable777">
+        <thead>
+            <tr>
+                <th>Classement</th>
+                <th>Nom</th>
+                <th>Points</th>
+                <th>Jetons</th>
+                <th class="admin-actions777">Actions</th>
+            </tr>
+        </thead>
+        <tbody id="friendsList777"></tbody>
+    </table>
+
+    <div class="form-container777 admin-actions777">
+        <div class="form-group777">
+            <label for="selectFriend777">Sélectionnez un membre :</label>
+            <select id="selectFriend777"></select>
+        </div>
+        <div class="form-group777">
+            <label for="pointsInput777">Nombre de points à modifier :</label>
+            <input type="number" id="pointsInput777" placeholder="Entrez les points" min="0">
+        </div>
+        <button onclick="addPoints777()">Ajouter les Points</button>
+        <button onclick="removePoints777()">Retirer les Points</button>
+    </div>
+
+    <div id="resetBtn777">
+        <button onclick="resetData777()">Réinitialiser les Données</button>
+    </div>
+
+    <script>
+        let isAdmin777 = false;
+        const adminPassword777 = "fépetdoro974";
+
+        let friends777 = JSON.parse(localStorage.getItem('friends777')) || [
+            { name: '🎅 Azmiya', points: 0 },
+            { name: '🎅 Baptiste', points: 0 },
+            { name: '🎅 Chloé', points: 0 },
+            { name: '🎅 Cylian', points: 0 },
+            { name: '🎅 Eddy', points: 0 },
+            { name: '🎅 Lauriane', points: 0 },
+            { name: '🎅 Loane', points: 0 },
+            { name: '🎅 Loriane', points: 0 },
+            { name: '🎅 Mahé', points: 0 },
+            { name: '🎅 Marion', points: 0 },
+            { name: '🎅 Maxens', points: 0 },
+            { name: '🎅 Tifanny', points: 0 },
+            { name: '🎅 Zahidah', points: 0 }
+        ];
+
+        const saveData777 = () => {
+            localStorage.setItem('friends777', JSON.stringify(friends777));
+        };
+
+        const resetData777 = () => {
+            if (isAdmin777 && confirm('Voulez-vous réinitialiser toutes les données ?')) {
+                localStorage.removeItem('friends777');
+                location.reload();
+            }
+        };
+
+        const authenticate777 = () => {
+            const passwordInput777 = document.getElementById('adminPassword777').value.trim();
+            if (passwordInput777 === adminPassword777) {
+                isAdmin777 = true;
+                document.querySelectorAll('.admin-actions777').forEach(el => el.style.display = 'block');
+                document.getElementById('authForm777').style.display = 'none';
+                document.getElementById('resetBtn777').style.display = 'block';
+                updateTable777();
+            } else {
+                alert('Mot de passe incorrect');
+            }
+        };
+
+        const updateTable777 = () => {
+            const tbody777 = document.getElementById('friendsList777');
+            const select777 = document.getElementById('selectFriend777');
+
+            tbody777.innerHTML = '';
+            select777.innerHTML = '';
+
+            friends777.sort((a, b) => b.points - a.points || a.name.localeCompare(b.name));
+
+            friends777.forEach((friend, index) => {
+                const row = tbody777.insertRow();
+                row.insertCell(0).textContent = `${index + 1}`;
+                row.insertCell(1).textContent = friend.name;
+                row.insertCell(2).textContent = friend.points;
+
+                const jetonsCell777 = row.insertCell(3);
+                jetonsCell777.innerHTML = '';
+                const verts777 = Math.floor(friend.points / 3);
+                const jaunes777 = Math.floor((friend.points % 3) / 2);
+                const bleus777 = friend.points % 3 % 2;
+
+                for (let i = 0; i < verts777; i++) jetonsCell777.innerHTML += `<span class="jeton777 vert777"></span>`;
+                for (let i = 0; i < jaunes777; i++) jetonsCell777.innerHTML += `<span class="jeton777 jaune777"></span>`;
+                for (let i = 0; i < bleus777; i++) jetonsCell777.innerHTML += `<span class="jeton777 bleu777"></span>`;
+
+                const actionsCell777 = row.insertCell(4);
+                actionsCell777.classList.add('admin-actions777');
+                if (isAdmin777) {
+                    actionsCell777.innerHTML = `
+                        <button onclick="addPoint777('${friend.name}')">+1</button>
+                        <button onclick="removePoint777('${friend.name}')">-1</button>
+                    `;
+                }
+
+                const option777 = document.createElement('option');
+                option777.value = friend.name;
+                option777.textContent = friend.name;
+                select777.appendChild(option777);
+            });
+        };
+
+        const addPoint777 = (name) => {
+            const friend777 = friends777.find(f => f.name === name);
+            if (friend777) {
+                friend777.points++;
+                saveData777();
+                updateTable777();
+            }
+        };
+
+        const removePoint777 = (name) => {
+            const friend777 = friends777.find(f => f.name === name);
+            if (friend777 && friend777.points > 0) {
+                friend777.points--;
+                saveData777();
+                updateTable777();
+            }
+        };
+
+        const addPoints777 = () => {
+            const selectedFriend777 = document.getElementById('selectFriend777').value;
+            const points777 = parseInt(document.getElementById('pointsInput777').value);
+
+            if (!selectedFriend777 || isNaN(points777) || points777 < 0) {
+                alert('Veuillez entrer un nombre de points valide.');
+                return;
+            }
+
+            const friend777 = friends777.find(f => f.name === selectedFriend777);
+            if (friend777) {
+                friend777.points += points777;
+                saveData777();
+                updateTable777();
+                alert(`Les points ont été ajoutés pour ${friend777.name}.`);
+            }
+        };
+
+        const removePoints777 = () => {
+            const selectedFriend777 = document.getElementById('selectFriend777').value;
+            const points777 = parseInt(document.getElementById('pointsInput777').value);
+
+            if (!selectedFriend777 || isNaN(points777) || points777 < 0) {
+                alert('Veuillez entrer un nombre de points valide.');
+                return;
+            }
+
+            const friend777 = friends777.find(f => f.name === selectedFriend777);
+            if (friend777) {
+                friend777.points = Math.max(0, friend777.points - points777);
+                saveData777();
+                updateTable777();
+                alert(`Les points ont été retirés pour ${friend777.name}.`);
+            }
+        };
+
+        updateTable777();
+    </script>
+</body>
+</html>

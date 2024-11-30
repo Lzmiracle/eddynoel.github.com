@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Noël Festif - Citations et Défis</title>
+  <style>
+    /* Style général */
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background: url('https://cdn.pixabay.com/photo/2017/12/19/11/42/christmas-3022686_1280.jpg') no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    .header {
+      text-align: center;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      font-size: 2.5rem;
+      text-shadow: 2px 2px 5px #ff0000;
+    }
+
+    main {
+      padding: 20px;
+      max-width: 900px;
+      margin: 20px auto;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      color: #333;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Section containers */
+    section {
+      background: linear-gradient(135deg, #ffe4b5, #ffcccb);
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    h2 {
+      text-align: center;
+      color: #ff4500;
+      margin-bottom: 20px;
+      font-family: 'Pacifico', cursive;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul li {
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 15px;
+      box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2), -3px -3px 6px rgba(255, 255, 255, 0.7);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    ul li:hover {
+      transform: scale(1.02);
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .time-display {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .time-display span {
+      font-size: 0.9rem;
+      color: #ff4500;
+    }
+
+    button.delete {
+      background-color: transparent;
+      border: none;
+      color: #ff0000;
+      font-size: 1.2rem;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    button.delete:hover {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+
+    button.delete.disabled {
+      cursor: not-allowed;
+      color: gray;
+    }
+
+    button.delete.disabled:hover {
+      transform: none;
+    }
+
+    .description-list li {
+      background: linear-gradient(145deg, #f9f3f0, #e4dad4);
+      border: 2px dashed #ff4500;
+      margin-bottom: 15px;
+      padding: 15px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1rem;
+    }
+
+    .description-list li:hover {
+      background: linear-gradient(145deg, #ffefd5, #ffe4b5);
+      transform: scale(1.03);
+      transition: all 0.2s ease-in-out;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    🎄 Noël Festif 🎄
+  </div>
+  <main>
+    <section id="citations77">
+      <h2>✨ Citations de Noël ✨</h2>
+      <ul id="citations-list77"></ul>
+    </section>
+    <section id="defis77">
+      <h2>🎁 Défis de Noël 🎁</h2>
+      <ul id="defis-list77"></ul>
+    </section>
+    <section id="description77">
+      <h2>📣 Description 📣</h2>
+      <ul id="description-list77" class="description-list"></ul>
+    </section>
+    <section id="admin77">
+      <h2>🔒 Administration</h2>
+      <form id="login-form77">
+        <label for="username77">Utilisateur :</label>
+        <input type="text" id="username77" placeholder="Nom d'utilisateur" required>
+        <label for="password77">Mot de passe :</label>
+        <input type="password" id="password77" placeholder="Mot de passe" required>
+        <button type="submit">Se connecter</button>
+      </form>
+      <div id="admin-panel77" class="hidden">
+        <form id="add-item-form77" class="form-section">
+          <label for="type77">Type :</label>
+          <select id="type77">
+            <option value="citation">Citation</option>
+            <option value="defi">Défi</option>
+          </select>
+          <label for="content77">Contenu :</label>
+          <textarea id="content77" placeholder="Votre texte ici..." required></textarea>
+          <label for="color77">Couleur :</label>
+          <input type="color" id="color77" value="#000000">
+          <label for="date77">Date de fin :</label>
+          <input type="datetime-local" id="date77" required>
+          <button type="submit">Ajouter</button>
+        </form>
+        <form id="add-description-form77" class="form-section">
+          <label for="description77">Ajouter une description :</label>
+          <textarea id="description-content77" placeholder="E.g., Eddy a réalisé un défi..." required></textarea>
+          <button type="submit">Ajouter la description</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const citations77 = JSON.parse(localStorage.getItem('citations77')) || [];
+    const defis77 = JSON.parse(localStorage.getItem('defis77')) || [];
+    const descriptions77 = JSON.parse(localStorage.getItem('descriptions77')) || [];
+    let isAdmin77 = false;
+
+    const citationsList77 = document.getElementById("citations-list77");
+    const defisList77 = document.getElementById("defis-list77");
+    const descriptionList77 = document.getElementById("description-list77");
+    const loginForm77 = document.getElementById("login-form77");
+    const adminPanel77 = document.getElementById("admin-panel77");
+
+    function displayItems77() {
+      citationsList77.innerHTML = "";
+      defisList77.innerHTML = "";
+      descriptionList77.innerHTML = "";
+
+      citations77.forEach((item, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <span style="color: ${item.color};">${item.content}</span>
+          <button class="delete ${!isAdmin77 ? 'disabled' : ''}" 
+                  onclick="${isAdmin77 ? `deleteItem77('citation', ${index})` : 'return false;'}" 
+                  title="${isAdmin77 ? 'Supprimer' : 'Non autorisé'}">
+            🗑️
+          </button>
+        `;
+        citationsList77.appendChild(li);
+      });
+
+      defis77.forEach((item, index) => {
+        const timeRemaining = Math.max(0, new Date(item.endDate) - new Date());
+        const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <span style="color: ${item.color};">${item.content}</span>
+          <div class="time-display">
+            🕒 <span>${days}j ${hours}h ${minutes}m ${seconds}s</span>
+          </div>
+          <button class="delete ${!isAdmin77 ? 'disabled' : ''}" 
+                  onclick="${isAdmin77 ? `deleteItem77('defi', ${index})` : 'return false;'}" 
+                  title="${isAdmin77 ? 'Supprimer' : 'Non autorisé'}">
+            🗑️
+          </button>
+        `;
+        defisList77.appendChild(li);
+      });
+
+      descriptions77.forEach((desc, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <span>${desc}</span>
+          <button class="delete ${!isAdmin77 ? 'disabled' : ''}" 
+                  onclick="${isAdmin77 ? `deleteItem77('description', ${index})` : 'return false;'}" 
+                  title="${isAdmin77 ? 'Supprimer' : 'Non autorisé'}">
+            🗑️
+          </button>
+        `;
+        descriptionList77.appendChild(li);
+      });
+    }
+
+    function deleteItem77(type, index) {
+      if (type === "citation") citations77.splice(index, 1);
+      else if (type === "defi") defis77.splice(index, 1);
+      else if (type === "description") descriptions77.splice(index, 1);
+      saveData77();
+      displayItems77();
+    }
+
+    function saveData77() {
+      localStorage.setItem('citations77', JSON.stringify(citations77));
+      localStorage.setItem('defis77', JSON.stringify(defis77));
+      localStorage.setItem('descriptions77', JSON.stringify(descriptions77));
+    }
+
+    loginForm77.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const username77 = document.getElementById("username77").value;
+      const password77 = document.getElementById("password77").value;
+      if (username77 === "admin" && password77 === "fépetdoro") {
+        loginForm77.classList.add("hidden");
+        adminPanel77.classList.remove("hidden");
+        isAdmin77 = true;
+        displayItems77();
+      } else {
+        alert("Identifiants incorrects !");
+      }
+    });
+
+    document.getElementById("add-item-form77").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const type77 = document.getElementById("type77").value;
+      const content77 = document.getElementById("content77").value;
+      const color77 = document.getElementById("color77").value;
+      const endDate77 = document.getElementById("date77").value;
+
+      if (type77 === "citation") citations77.push({ content: content77, color: color77 });
+      else defis77.push({ content: content77, color: color77, endDate: endDate77 });
+
+      saveData77();
+      displayItems77();
+      e.target.reset();
+    });
+
+    document.getElementById("add-description-form77").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const descriptionContent77 = document.getElementById("description-content77").value;
+      descriptions77.push(descriptionContent77);
+      saveData77();
+      displayItems77();
+      e.target.reset();
+    });
+
+    setInterval(displayItems77, 1000);
+    displayItems77();
+  </script>
+</body>
+</html>
